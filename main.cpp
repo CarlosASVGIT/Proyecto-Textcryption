@@ -1,8 +1,9 @@
+//hola
 #include <iostream>
 #include <stdlib.h> //libreria para limpiar la pantalla
-#include <string> //librería para manipular correctamente strings
+#include <string> //librerÃ­a para manipular correctamente strings
 
-#include <time.h> //librería que permite usar 'time' como valor para 'srand'
+#include <time.h> //librerÃ­a que permite usar 'time' como valor para 'srand'
 using namespace std;
 int numCartasMazo = 0;
 int numTurno = 0;
@@ -18,7 +19,7 @@ struct Carta{ //Se declaran los elementos que tiene cada 'Carta'
     int Pos; //sin uso de momento
     int IDbaraja; //sin uso de momento
 };
-struct Carta Baraja[6] = { //Se crean las cartas que el jugador podría agarrar de la BARAJA
+struct Carta Baraja[6] = { //Se crean las cartas que el jugador podrÃ­a agarrar de la BARAJA
     //Nombre, HP, PWR, Cost
         {"Norm", 3, 2, 2, 0, 0, 0},
         {"Prot", 4, 1, 3, 0, 0, 0},
@@ -27,7 +28,7 @@ struct Carta Baraja[6] = { //Se crean las cartas que el jugador podría agarrar d
         {"Debi", 2, 2, 2, 0, 0, 0},
         {"Fuer", 4, 5, 5, 0, 0, 0}
 };
-struct Carta CartasEnemigoNIV1[20] = { //Se crean las cartas que la computadora tendrá para atacar
+struct Carta CartasEnemigoNIV1[20] = { //Se crean las cartas que la computadora tendrÃ¡ para atacar
     //Turno es el numero del turno
     //Pos es la posicion en que se pondra, 1-2-3-4-5
     //Nombre, HP, PWR, Cost, Turno, Pos
@@ -45,7 +46,7 @@ struct Carta TableroVacio[1] ={
 struct Carta TuTablero[5];
 struct Carta TableroEnemigo[5];
 struct Carta PreTableroEnemigo[5];
-struct Carta mazo[10]; //Se crea el arreglo del MAZO del jugador, este se crea vacío
+struct Carta mazo[10]; //Se crea el arreglo del MAZO del jugador, este se crea vacÃ­o
 void ImprimirPantalla(){
     ImprimirCartaTablero();
     ImprimirMazo();
