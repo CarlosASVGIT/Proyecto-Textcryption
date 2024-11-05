@@ -1,4 +1,4 @@
-//jijijijijiji //jajajajajaja
+//jejejejeje//jijijijijiji //jajajajajaja
 #include <iostream>
 #include <stdlib.h> //libreria para limpiar la pantalla
 #include <string> //librería para manipular correctamente strings
