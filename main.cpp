@@ -1,14 +1,20 @@
-//jejejejeje//jijijijijiji //jajajajajaja
 #include <iostream>
 #include <stdlib.h> //libreria para limpiar la pantalla
 #include <string> //librería para manipular correctamente strings
 
 #include <time.h> //librería que permite usar 'time' como valor para 'srand'
 using namespace std;
+
+//Declaración de variables
 int numCartasMazo = 0;
 int numTurno = 0;
 int eleccion;
 int numCartasNIV1 = 6;
+
+
+
+
+//Declaración de esructura
 
 struct Carta{ //Se declaran los elementos que tiene cada 'Carta'
     string nombre;
@@ -19,6 +25,8 @@ struct Carta{ //Se declaran los elementos que tiene cada 'Carta'
     int Pos; //sin uso de momento
     int IDbaraja; //sin uso de momento
 };
+
+//Definicion de estructuras
 struct Carta Baraja[6] = { //Se crean las cartas que el jugador podría agarrar de la BARAJA
     //Nombre, HP, PWR, Cost
         {"Norm", 3, 2, 2, 0, 0, 0},
@@ -43,29 +51,32 @@ struct Carta TableroVacio[1] ={
     {"    ", 0, 0, 0, 0, 0, 0}
 };
 
-struct Carta TuTablero[5];
-struct Carta TableroEnemigo[5];
-struct Carta PreTableroEnemigo[5];
-struct Carta mazo[10]; //Se crea el arreglo del MAZO del jugador, este se crea vacío
-void ImprimirPantalla(){
-    ImprimirCartaTablero();
-    ImprimirMazo();
+//Declaración de estructuras VACIAS
+struct Carta TuTablero[5]; //Cartas del tablero del lado Tuyo
+struct Carta TableroEnemigo[5]; //Cartas del tablero del lado Enemigo
+struct Carta PreTableroEnemigo[5]; //Cartas que el Enemigo va a poner
+struct Carta mazo[10]; //Cartas que tienes en tu Mano (mazo)
+
+//Funciones
+void ImprimirCartaTablero(struct Carta c){
+    cout << "|" << c.nombre << "[HP: " << c.HP << " PWR: " << c.PWR << "]| ";
 }
+
 void ImprimirCartaPreTablero(struct Carta c){
     cout << "|" << "[HP:" << c.HP << " PWR: " << c.PWR << "]| " << endl;
 }
-void ImprimirCartaTablero(struct Carta c){
-    cout << "|" << c.nombre << "[HP:" << c.HP+Damage << " PWR: " << c.PWR+Effect << "]| ";
-}
-void ImprimirCartaMazo(struct Carta c){ //imprime info de Carta individual
-    cout << "-" << c.nombre << " COST=" << c.COST << " [HP:" << c.HP << " PWR: " << c.PWR << "]" << endl;
-}
+
 void ImprimirTablero(){
     cout << "Tablero:" << endl;
     for(int i = 0; i < 5; i++){
-        ImprimirCartaTablero(TuTablero[1]);
-        ImprimirCartaTablero(TableroEnemigo[1]);
+        ImprimirCartaTablero(TuTablero[i]);
+        ImprimirCartaTablero(TableroEnemigo[i]);
+        ImprimirCartaPreTablero(PreTableroEnemigo[i]);
     }
+}
+
+void ImprimirCartaMazo(struct Carta c){//Imprime info de Carta individualmente
+    cout << "-" << c.nombre << " COST=" << c.COST << " [HP:" << c.HP << " PWR: " << c.PWR << "]" << endl;
 }
 
 void ImprimirMazo(){ //Imprime el MAZO completo
@@ -74,6 +85,19 @@ void ImprimirMazo(){ //Imprime el MAZO completo
         ImprimirCartaMazo(mazo[i]);
     }
 }
+
+void ImprimirPantalla(){ //Imprime tablero y mazo completos
+    ImprimirTablero();
+    ImprimirMazo();
+}
+
+
+
+
+
+
+
+
 void InicioTurno(){
     for(int i = 0; i < 5; i++){
         if(CartasEnemigoNIV1[i].Turno==0){
@@ -81,8 +105,8 @@ void InicioTurno(){
         }
     }
     for(int i = 0; i < 5; i++){
-        if(CartasEnemigoNIV1[i].Turno==1){
-            PreTableroEnemigo[i]=CartasEnemigoNIV1[i];
+        if(CartasEnemigoNIV1[i].Turno==1){ //-----
+            PreTableroEnemigo[i]=CartasEnemigoNIV1[i]; //----
         }
     }
     numTurno++;
@@ -98,7 +122,7 @@ void AvanceTurno(){
         for(int j = 0; j < numCartasNIV1; j++){
             if(CartasEnemigoNIV1[i].Turno==numTurno){
                 if(PreTableroEnemigo[i].Turno==0){
-                    PreTableroEnemigo[i]=numCartasNIV1[i];
+                    PreTableroEnemigo[i]=CartasEnemigoNIV1[i];
                 }
             }
         }
@@ -137,15 +161,13 @@ void UsarCartaMazo(){ //Quita una carta del MAZO del jugador
 
 
 
+
 int main()
 {
+    //Cambia la semilla para el generador de numero aleatorio "rand"
     srand(time(NULL));
     DarMazoInicial();
 
-    do while(1==1){
-
-    }
-     //Cambia la semilla para el generador de numero aleatorio "rand"
 
     ImprimirMazo();
 
@@ -161,14 +183,3 @@ int main()
 
     return 0;
 }
-
-
-/*
-void tablero() {
-    cout << "[HP:" << HPjugador << "]" "[HP:" << STjugador << "]" << endl << endl;
-    cout << "-" << Nombre[f1] << "[HP:" << HP[f1] << " PWR: " PWR[f1] << "]" << endl;
-    cout << "-" << Nombre[f2] << "[HP:" << HP[f2] << " PWR: " PWR[f2] << "]" << endl;
-    cout << "-" << Nombre[f3] << "[HP:" << HP[f3] << " PWR: " PWR[f3] << "]" << endl;
-    cout << "-" << Nombre[f4] << "[HP:" << HP[f4] << " PWR: " PWR[f4] << "]" << endl;
-};*/
-
