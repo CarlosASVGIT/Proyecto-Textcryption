@@ -58,25 +58,39 @@ struct Carta PreTableroEnemigo[5]; //Cartas que el Enemigo va a poner
 struct Carta mazo[10]; //Cartas que tienes en tu Mano (mazo)
 
 //Funciones
+
+
 void ImprimirCartaTablero(struct Carta c){
     cout << "|" << c.nombre << "[HP: " << c.HP << " PWR: " << c.PWR << "]| ";
 }
 
 void ImprimirCartaPreTablero(struct Carta c){
-    cout << "|" << "[HP:" << c.HP << " PWR: " << c.PWR << "]| " << endl;
+    cout << "|" << "[HP:" << c.HP << " PWR: " << c.PWR << "]| ";
 }
 
-void ImprimirTablero(){
-    cout << "Tablero:" << endl;
-    for(int i = 0; i < 5; i++){
-        ImprimirCartaTablero(TuTablero[i]);
-        ImprimirCartaTablero(TableroEnemigo[i]);
-        ImprimirCartaPreTablero(PreTableroEnemigo[i]);
-    }
-}
 
 void ImprimirCartaMazo(struct Carta c){//Imprime info de Carta individualmente
     cout << "-" << c.nombre << " COST=" << c.COST << " [HP:" << c.HP << " PWR: " << c.PWR << "]" << endl;
+}
+
+void ImrpimirCartaPreTableroBien(Carta c){}///Puedes empezar con esta función para imprimir el pretablero VACIO
+
+void ImrpimirCartaTableroBien(Carta c){
+    if(c.HP == 0){
+        cout << "| - -" << "[ - -Vacio- - ]| ";
+    } else {
+        ImprimirCartaTablero(c);
+    }
+}
+
+void ImprimirTablero() {
+    cout << "Tablero:" << endl;
+    for (int i = 0; i < 5; i++) {
+        ImrpimirCartaTableroBien(TuTablero[i]);
+        ImrpimirCartaTableroBien(TableroEnemigo[i]);
+        ImprimirCartaPreTablero(PreTableroEnemigo[i]);
+        cout << endl; // Para separar cada fila del tablero
+    }
 }
 
 void ImprimirMazo(){ //Imprime el MAZO completo
@@ -95,9 +109,11 @@ void ImprimirPantalla(){ //Imprime tablero y mazo completos
 
 
 
-
-
-
+//Las funciones siguientes
+///InicioTurno()
+///AvanceTruno()
+///void DarTurno()
+/*No se usan aún, sera para el siguiente*/ ///avance
 void InicioTurno(){
     for(int i = 0; i < 5; i++){
         if(CartasEnemigoNIV1[i].Turno==0){
@@ -148,8 +164,8 @@ void AgarrarCartaBaraja(){ //Agrega una carta al MAZO del jugador
 
     cout << "------------------" << endl;
 }
-void UsarCartaMazo(){ //Quita una carta del MAZO del jugador
-    ImprimirMazo();
+void UsarCartaMazo(){ ///En esta tienes que añadir algo que haga que la carta elegida se ponga en el tablero
+    ImprimirMazo();/*Quita una carta del MAZO del jugador */ ///Tienes que preguntar al jugador donde quiere poner su carta
     cout << "Que carta vas a usar?" << endl;
     cin >> eleccion;
     for(int i = eleccion-1; i < numCartasMazo; i++){ //Ciclo para reccorrer las cartas del MAZO
@@ -166,19 +182,11 @@ int main()
 {
     //Cambia la semilla para el generador de numero aleatorio "rand"
     srand(time(NULL));
+
+    ImprimirTablero();
+
     DarMazoInicial();
-
-
-    ImprimirMazo();
-
-
-    AgarrarCartaBaraja();
-    ImprimirMazo();
-
-
-    ImprimirMazo();
     UsarCartaMazo();
-
     ImprimirMazo();
 
     return 0;
