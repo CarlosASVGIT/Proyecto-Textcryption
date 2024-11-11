@@ -114,7 +114,8 @@ void ImprimirPantalla(){ //Imprime tablero y mazo completos
 ///AvanceTruno()
 ///void DarTurno()
 /*No se usan aún, sera para el siguiente*/ ///avance
-void InicioTurno(){
+
+/**void InicioTurno(){
     for(int i = 0; i < 5; i++){
         if(CartasEnemigoNIV1[i].Turno==0){
             TableroEnemigo[i]=CartasEnemigoNIV1[i];
@@ -145,7 +146,7 @@ void AvanceTurno(){
     }
 }
 void DarTurno(){
-}
+}**/
 void DarMazoInicial(){ //Pone cartas Random en el array MAZO del jugador
     for(int i = 0; i<3; i++){
         int Aleatorio = rand() % 6;
@@ -156,7 +157,7 @@ void DarMazoInicial(){ //Pone cartas Random en el array MAZO del jugador
 
 void AgarrarCartaBaraja(){ //Agrega una carta al MAZO del jugador
     cout << "Agarraste una carta" << endl;
-    int Aleatorio = rand() % 6;
+    int Aleatorio = rand() % 6;//Escoje un numero del 1 al 6 para agarrar una carta del array Baraja
     mazo[numCartasMazo]=Baraja[Aleatorio];
 
     ImprimirCartaMazo(mazo[numCartasMazo]);// imprime la carta obtenida
@@ -191,3 +192,4 @@ int main()
 
     return 0;
 }
+
