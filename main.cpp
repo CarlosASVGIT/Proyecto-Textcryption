@@ -218,6 +218,7 @@ void Stamina(){
 
 
 
+
 int main()
 {
     //Cambia la semilla para el generador de numero aleatorio "rand"
