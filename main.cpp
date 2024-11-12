@@ -73,7 +73,12 @@ void ImprimirCartaMazo(struct Carta c){//Imprime info de Carta individualmente
     cout << "-" << c.nombre << " COST=" << c.COST << " [HP:" << c.HP << " PWR: " << c.PWR << "]" << endl;
 }
 
-void ImrpimirCartaPreTableroBien(Carta c){}///Puedes empezar con esta función para imprimir el pretablero VACIO
+void ImprimirCartaPreTableroBien(struct Carta c){    if (c.HP == 0) {
+        cout << "|- -[ - - Vacio - - ]| "<<endl;
+    } else {
+        ImprimirCartaTablero(c);
+    }
+}///Puedes empezar con esta función para imprimir el pretablero VACIO
 
 void ImrpimirCartaTableroBien(Carta c){
     if(c.HP == 0){
@@ -88,7 +93,8 @@ void ImprimirTablero() {
     for (int i = 0; i < 5; i++) {
         ImrpimirCartaTableroBien(TuTablero[i]);
         ImrpimirCartaTableroBien(TableroEnemigo[i]);
-        ImprimirCartaPreTablero(PreTableroEnemigo[i]);
+        //ImprimirCartaPreTablero(PreTableroEnemigo[i]);
+        ImprimirCartaPreTableroBien(PreTableroEnemigo[i]);
         cout << endl; // Para separar cada fila del tablero
     }
 }
@@ -169,10 +175,29 @@ void UsarCartaMazo(){ ///En esta tienes que añadir algo que haga que la carta e
     ImprimirMazo();/*Quita una carta del MAZO del jugador */ ///Tienes que preguntar al jugador donde quiere poner su carta
     cout << "Que carta vas a usar?" << endl;
     cin >> eleccion;
+    Carta CartaUsada= mazo[eleccion-1];//variable temporal
+
     for(int i = eleccion-1; i < numCartasMazo; i++){ //Ciclo para reccorrer las cartas del MAZO
         mazo[i]=mazo[i+1];
     }
-    numCartasMazo--; //contador de cartas totales en el MAZO
+     numCartasMazo--;//contador de cartas totales en el MAZO
+    int pos;
+    cout<<"en que posicion quieres poner la carta?";
+    cin>>pos;
+    while(TuTablero[pos-1].HP!=0){
+        cout<<"la pocision ya esta ocupada"<<endl;
+        cout<<"en que posicion quieres poner la carta?";
+        cin>>pos;}
+
+    while(pos<1 || pos>5){
+        cout<<"pocision invalida"<<endl;
+         cout<<"en que posicion quieres poner la carta?";
+        cin>>pos;
+    }
+    TuTablero[pos-1]=CartaUsada;//imprimir la carta que uses del mazo
+
+    ImprimirTablero();
+
 }
 
 void Stamina(){
