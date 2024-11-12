@@ -175,6 +175,46 @@ void UsarCartaMazo(){ ///En esta tienes que añadir algo que haga que la carta e
     numCartasMazo--; //contador de cartas totales en el MAZO
 }
 
+void Stamina(){
+    int opc = 0, staMax = 0, i = 1, temp = i;
+
+    do {
+        if(i > 6) {
+            i = 6;
+        }
+
+        if(temp > 6) {
+            temp = 6;
+        }
+        for(staMax = 1; staMax <= i; staMax++) {
+            cout << "*"; //(unsigned char)219
+            }
+        cout << "\nQue deseas hacer? \n1) Nada \n2) quitar stamina \n3) Terminar turno \n4) Salir" << endl;
+        cin >> opc;
+
+        switch(opc) {
+        case 1:
+            continue;
+        case 2:
+            a = i;
+            i = i - 1;
+            continue;
+        case 3:
+            break;
+        case 4:
+            return 0;
+            break;
+        default:
+            cout << "Error" << endl;
+            break;
+            }
+        i = temp;
+        i++;
+        temp++;
+    } while(true);
+}
+
+
 
 
 
