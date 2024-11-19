@@ -196,6 +196,13 @@ void UsarCartaMazo(){ ///En esta tienes que añadir algo que haga que la carta e
     if (eleccion == 0){break;}
     Carta CartaUsada = mazo[eleccion-1];//variable temporal
 
+    while(CartaUsada.COST>staminaActual){
+     cout<<"No tienes suficiente energia"<<endl;
+     cout << "Que carta vas a usar?      (Cancelar - 0)" << endl;
+     cin >> eleccion;
+        if (eleccion == 0){return;}}
+
+
     int pos;
     cout<<"En que posicion quieres poner la carta?";
     cin>>pos;
@@ -219,6 +226,7 @@ void UsarCartaMazo(){ ///En esta tienes que añadir algo que haga que la carta e
         mazo[i]=mazo[i+1];
     }
     TuTablero[pos-1]=CartaUsada;//imprimir la carta que uses del mazo
+    staminaActual=staminaActual-CartaUsada.COST;
     ImprimirTablero();
     break;
     }while(true);
