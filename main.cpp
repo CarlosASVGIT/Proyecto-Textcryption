@@ -1,18 +1,16 @@
 #include <iostream>
-#include <iomanip> //libreria para imprimir en consola mas bonito
 #include <stdlib.h> //libreria para limpiar la pantalla
-#include <string> //librería para manipular correctamente strings
-
 #include <time.h> //librería que permite usar 'time' como valor para 'srand'
+
 using namespace std;
 
-//Declaración de variables
+//Declaración de variables globales
 int numCartasMazo = 0;
 int numTurno = 0;
 int staminaMax = 1, staminaActual = staminaMax;
 int numCartasNIV1 = 6;
 
-//Declaración de Funciones
+///Declaración de Funciones
 void DarTurno();
 void UsarCartaMazo();
 void ImprimirVitales();
@@ -31,20 +29,20 @@ void DarTurno();
 
 
 
-//Declaración de esructura
+///Declaración de esructura
 
 struct Carta{ //Se declaran los elementos que tiene cada 'Carta'
     string nombre;
     int HP;
     int PWR;
     int COST;
-    int Turno; //sin uso de momento
-    int Pos; //sin uso de momento
+    int Turno;
+    int Pos;
     int IDbaraja; //sin uso de momento
 };
 
-//Definicion de estructuras
-struct Carta Baraja[6] = { //Se crean las cartas que el jugador podría agarrar de la BARAJA
+///Definicion de estructuras
+struct Carta Baraja[6] = { //Cartas que el jugador PODRÍA agarrar de la BARAJA
     //Nombre, HP, PWR, Cost
         {"Norm", 3, 2, 2, 0, 0, 0},
         {"Prot", 4, 1, 3, 0, 0, 0},
@@ -53,7 +51,7 @@ struct Carta Baraja[6] = { //Se crean las cartas que el jugador podría agarrar 
         {"Debi", 2, 2, 2, 0, 0, 0},
         {"Fuer", 4, 5, 5, 0, 0, 0}
 };
-struct Carta CartasEnemigoNIV1[20] = { //Se crean las cartas que la computadora tendrá para atacar
+struct Carta CartasEnemigoNIV1[6] = { //Se crean las cartas que la computadora tendrá para atacar
     //Turno es el numero del turno
     //Pos es la posicion en que se pondra, 1-2-3-4-5
     //Nombre,   HP,PWR,Cost, Turno, Pos
@@ -68,7 +66,7 @@ struct Carta TableroVacio[1] ={
     {"    ", 0, 0, 0, 0, 0, 0}
 };
 
-//Declaración de estructuras VACIAS
+///Declaración de estructuras VACIAS
 struct Carta TuTablero[5]; //Cartas del tablero del lado Tuyo
 struct Carta TableroEnemigo[5]; //Cartas del tablero del lado Enemigo
 struct Carta PreTableroEnemigo[5]; //Cartas que el Enemigo va a poner
@@ -168,7 +166,7 @@ void ImprimirMazo(){ //Imprime el MAZO completo
 }
 
 void ImprimirPantalla(){ //Imprime tablero y mazo completos
-    system("cls"); //Limpia la pantalla (ºwº)
+    system("cls"); //Limpia la pantalla
     ImprimirVitales();
     ImprimirTablero();
     ImprimirMazo();
@@ -238,6 +236,7 @@ void UsarCartaMazo(){
         if (pos == 0){break;}
     }
     if (pos == 0){break;}
+
     numCartasMazo--;//contador de cartas totales en el MAZO
 
     for(int i = eleccion-1; i < numCartasMazo; i++){ //Ciclo para reccorrer las cartas del MAZO
@@ -245,31 +244,31 @@ void UsarCartaMazo(){
     }
     TuTablero[pos-1]=CartaUsada;//imprimir la carta que uses del mazo
     staminaActual=staminaActual-CartaUsada.COST;
-    ImprimirTablero();
     break;
     }while(true);
 }
 
-void ActualizarStamina(){
+void ActualizarStamina(){ //Aumenta la STAMINAMAXima en +1 hasta
+    staminaMax++;
     if(staminaMax > 6) {
         staminaMax = 6;
     }
-    staminaMax++;
     staminaActual = staminaMax;
 }
 
 
 void InicioTurno(){
     for(int i = 0; i < numCartasNIV1; i++){
-        if(CartasEnemigoNIV1[i].Turno==0){
-            TableroEnemigo[CartasEnemigoNIV1[i].Pos]=CartasEnemigoNIV1[i];
+            switch(CartasEnemigoNIV1[i].Turno){
+            case 0:
+                TableroEnemigo[CartasEnemigoNIV1[i].Pos]=CartasEnemigoNIV1[i];
+                break;
+            case 1:
+                PreTableroEnemigo[CartasEnemigoNIV1[i].Pos]=CartasEnemigoNIV1[i];
+            break;
         }
     }
-    for(int i = 0; i < numCartasNIV1; i++){
-        if(CartasEnemigoNIV1[i].Turno==1){
-            PreTableroEnemigo[CartasEnemigoNIV1[i].Pos]=CartasEnemigoNIV1[i];
-        }
-    }
+
     numTurno++;
 }
 
