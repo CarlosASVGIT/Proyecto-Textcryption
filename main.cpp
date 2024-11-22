@@ -88,6 +88,7 @@ struct Carta mazo[10]; //Cartas que tienes en tu Mano (mazo)
 
 int main()
 {
+    int balanza = 0;
     //Cambia la semilla para el generador de numero aleatorio "rand"
     srand(time(NULL));
 
@@ -115,7 +116,7 @@ void ImprimirVitales(){
     for(int i = 1; i <= staminaActual; i++) {
         cout << "*"; //(unsigned char)219
     }
-    cout << "]   " << "[~~~~~|o~~~~]";
+    cout << "]           " << balanza;
     cout << endl << endl;
 }
 
@@ -159,9 +160,9 @@ void ImprimirCartaMazo(struct Carta c){//Imprime info de Carta individualmente
 }
 
 void ImprimirTablero() {
-    cout << "     Tablero:" << endl << endl;
+    cout << " Fila     Tu Tablero         Tablero Enemigo" << endl << endl;
     for (int i = 0; i < 5; i++) {
-        cout << "  ";
+        cout << "  " << i+1 << "  ";
         ImprimirCartaTablero(TuTablero[i]);
         ImprimirCartaTablero(TableroEnemigo[i]);
         ImprimirCartaPreTablero(PreTableroEnemigo[i]);
@@ -179,8 +180,8 @@ void ImprimirMazo(){ //Imprime el MAZO completo
 void Continuar(){
     ImprimirPantalla();
     MenuOpciones();
-    AccionEnemigo();
     AccionJugador();
+    AccionEnemigo();
 };
 void ImprimirPantalla(){ //Imprime tablero y mazo completos
     system("cls"); //Limpia la pantalla
@@ -376,8 +377,9 @@ void AccionEnemigo(){
             if (TuTablero[i].HP!=0){
                 TuTablero[i].HP=TuTablero[i].HP-TableroEnemigo[i].PWR;
             }
-        }else {
-            balanza=balanza-TableroEnemigo[i].PWR;
+            else {
+                balanza=balanza-TableroEnemigo[i].PWR;
+            }
         }
     }
 }
