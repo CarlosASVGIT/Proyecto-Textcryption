@@ -9,6 +9,7 @@ int numCartasMazo = 0;
 int numTurno = 0;
 int staminaMax = 1, staminaActual = staminaMax;
 int numCartasNIV1 = 6;
+int balanza=0;
 
 ///Declaración de Funciones
 void DarTurno();
@@ -26,6 +27,8 @@ void AgarrarCartaBaraja();
 void InicioTurno();
 void AvanceTurno();
 void DarTurno();
+void AccionEnemigo();
+void AccionJugador();
 
 
 
@@ -81,6 +84,7 @@ struct Carta mazo[10]; //Cartas que tienes en tu Mano (mazo)
 
 int main()
 {
+    int balanza;
     //Cambia la semilla para el generador de numero aleatorio "rand"
     srand(time(NULL));
 
@@ -171,6 +175,8 @@ void ImprimirPantalla(){ //Imprime tablero y mazo completos
     ImprimirTablero();
     ImprimirMazo();
     MenuOpciones();
+    AccionEnemigo();
+    AccionJugador();
 }
 
 void DarTurno(){
@@ -300,3 +306,35 @@ void AvanceTurno(){
         }
     }
 }
+void AccionJugador(){
+        for(int i = 0; i < numCartasNIV1; i++){
+        if (TuTablero[i].HP!=0){
+            if (TableroEnemigo[i].HP!=0){
+                TableroEnemigo[i].HP=TableroEnemigo[i].HP-TuTablero[i].PWR;
+
+                if (TableroEnemigo[i].HP<0){
+                    if (PreTableroEnemigo[i].HP!=0){
+                        PreTableroEnemigo[i].HP=PreTableroEnemigo[i].HP+TableroEnemigo[i].HP;
+                    }
+                }
+            }
+            else {
+                balanza=balanza+TuTablero[i].PWR;
+
+            }
+        }
+     }
+ }
+
+void AccionEnemigo(){
+    for(int i = 0; i < numCartasNIV1; i++) {
+        if (TableroEnemigo[i].HP!=0){
+            if (TuTablero[i].HP!=0){
+                TuTablero[i].HP=TuTablero[i].HP-TableroEnemigo[i].PWR;
+            }
+        }else {
+            balanza=balanza-TableroEnemigo[i].PWR;
+        }
+    }
+}
+
