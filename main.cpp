@@ -9,10 +9,11 @@ int numCartasMazo = 0;
 int numTurno = 0;
 int staminaMax = 1, staminaActual = staminaMax;
 int numCartasNIV1 = 6;
-int balanza=0;
+int balanza = 0;
 
 ///Declaración de Funciones
 void DarTurno();
+void Continuar();
 void UsarCartaMazo();
 void ImprimirVitales();
 void MenuOpciones();
@@ -65,6 +66,9 @@ struct Carta CartasEnemigoNIV1[6] = { //Se crean las cartas que la computadora t
         {"Debi", 2, 2, 2,    4,     3, 0},
         {"Fuer", 4, 5, 5,    5,     3, 0}
 };
+struct Carta Defensa[1] ={
+    {"Defe", 2, 0, 1, 0, 0, 0}
+};
 struct Carta TableroVacio[1] ={
     {"    ", 0, 0, 0, 0, 0, 0}
 };
@@ -84,20 +88,21 @@ struct Carta mazo[10]; //Cartas que tienes en tu Mano (mazo)
 
 int main()
 {
-    int balanza;
     //Cambia la semilla para el generador de numero aleatorio "rand"
     srand(time(NULL));
 
     DarMazoInicial();
     InicioTurno();
-    ImprimirPantalla();
-    ImprimirPantalla();
-    ImprimirPantalla();
-    ImprimirPantalla();
-    ImprimirPantalla();
-    ImprimirPantalla();
-    ImprimirPantalla();
-    ImprimirPantalla();
+    Continuar();
+    Continuar();
+    Continuar();
+    Continuar();
+    Continuar();
+    Continuar();
+    Continuar();
+    Continuar();
+    Continuar();
+
 
 
     return 0;
@@ -116,8 +121,8 @@ void ImprimirVitales(){
 
 void MenuOpciones(){
     cout << "  ~ Que desea hacer?" << endl << endl;
-    cout << "        1            2          3  " << endl;
-    cout << "   (Dar Turno)  (Usar Carta)  (???)" << endl;
+    cout << "        1            2               3  " << endl;
+    cout << "   (Dar Turno)  (Usar Carta)  (Agarrar Carta)" << endl;
     int opc;
     cin >> opc;
     switch(opc){
@@ -126,6 +131,9 @@ void MenuOpciones(){
         break;
     case 2:
         UsarCartaMazo();
+        break;
+    case 3:
+        AgarrarCartaBaraja();
         break;
     }
 }
@@ -168,15 +176,17 @@ void ImprimirMazo(){ //Imprime el MAZO completo
     }
     cout << endl;
 }
-
+void Continuar(){
+    ImprimirPantalla();
+    MenuOpciones();
+    AccionEnemigo();
+    AccionJugador();
+};
 void ImprimirPantalla(){ //Imprime tablero y mazo completos
     system("cls"); //Limpia la pantalla
     ImprimirVitales();
     ImprimirTablero();
     ImprimirMazo();
-    MenuOpciones();
-    AccionEnemigo();
-    AccionJugador();
 }
 
 void DarTurno(){
@@ -185,33 +195,62 @@ void DarTurno(){
 }
 
 void DarMazoInicial(){ //Pone cartas Random en el array MAZO del jugador
-    for(int i = 0; i<3; i++){
+    mazo[0]=Defensa[0];
+    for(int i = 0; i<=3; i++){
         int Aleatorio = rand() % 6;
-        mazo[i]=Baraja[Aleatorio];
+        mazo[i+1]=Baraja[Aleatorio];
         numCartasMazo++; //contador de cartas totales en el MAZO
     }
 }
 
 void AgarrarCartaBaraja(){ //Agrega una carta al MAZO del jugador
-    cout << "Agarraste una carta" << endl;
-    int Aleatorio = rand() % 6;//Escoje un numero del 1 al 6 para agarrar una carta del array Baraja
-    mazo[numCartasMazo]=Baraja[Aleatorio];
+    int opc;
+    ImprimirPantalla();
+    cout << "  ~ De que baraja quieres agarrar la carta?"<< endl << endl << endl;
+    cout << "      Baraja Aleatoria       Baraja Defensa"<< endl;
+    cout << "           - 1 -                  - 2 -"<< endl;
+    cin >> opc;
+    ImprimirPantalla();
 
-    ImprimirCartaMazo(mazo[numCartasMazo]);// imprime la carta obtenida
-    numCartasMazo++; //contador de cartas totales en el MAZO
+    do{
+    if (opc == 0){break;}
 
-    cout << "------------------" << endl;
+    switch (opc){
+    case 1:{
+        int Aleatorio = rand() % 6;//Escoje un numero del 1 al 6 para agarrar una carta del array Baraja
+        mazo[numCartasMazo]=Baraja[Aleatorio];
+        numCartasMazo++; //contador de cartas totales en el MAZO
+        break;}
+    case 2:{
+        mazo[numCartasMazo]=Defensa[0];
+        numCartasMazo++;
+        break;}
+    }
+
+    ImprimirPantalla();
+    cout << "  ~ Agarraste la carta:" << endl << endl << endl;
+    cout << "      ";
+    ImprimirCartaMazo(mazo[numCartasMazo-1]);
+    cout << endl;
+    system("pause");
+    break;
+    }while(true);
 }
 
 void UsarCartaMazo(){
     /*Quita una carta del MAZO del jugador */
-    cout << "Que carta vas a usar?      (Cancelar - 0)" << endl;
+    ImprimirPantalla();
+    cout << "  ~ Que carta vas a usar?      (Cancelar - 0)" << endl << endl << endl;
     int eleccion;
     do {
     cin >> eleccion;
+
     while(eleccion > numCartasMazo){
         cout<<"Esa carta no existe"<<endl;
-        cout<<"Que carta vas a usar?";
+        system("pause");
+        ImprimirPantalla();
+
+        cout<<"  ~ Que carta vas a usar?      (Cancelar - 0)" << endl << endl << endl;
         cin>>eleccion;
     }
     if (eleccion == 0){break;}
@@ -219,6 +258,8 @@ void UsarCartaMazo(){
 
     while(CartaUsada.COST>staminaActual){
      cout<<"No tienes suficiente energia"<<endl;
+     system("pause");
+     ImprimirPantalla();
      cout << "Que carta vas a usar?      (Cancelar - 0)" << endl;
      cin >> eleccion;
      if (eleccion == 0){break;}
@@ -226,10 +267,13 @@ void UsarCartaMazo(){
     if (eleccion == 0){break;}
 
     int pos;
-    cout<<"En que posicion quieres poner la carta?";
+    ImprimirPantalla();
+    cout<<"En que posicion quieres poner la carta?" << endl << endl << endl;
     cin>>pos;
     while(TuTablero[pos-1].HP!=0){
         cout<<"la pocision ya esta ocupada"<<endl;
+        system("pause");
+        ImprimirPantalla();
         cout<<"en que posicion quieres poner la carta?";
         cin>>pos;
         if (pos == 0){break;}
@@ -337,4 +381,3 @@ void AccionEnemigo(){
         }
     }
 }
-
