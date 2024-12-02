@@ -97,18 +97,16 @@ int main()
 
     DarMazoInicial();
     InicioTurno();
-    Continuar();
-    Continuar();
-    Continuar();
-    Continuar();
-    Continuar();
-    Continuar();
-    Continuar();
-    Continuar();
-    Continuar();
-
-
-
+    //Continuar();
+    do {
+        Continuar();
+    } while(balanza < 5 && balanza > -5);
+    system("cls");
+    if (balanza >= 5){
+        cout << "VICTORIOSO FELICIDADES LO DERROTASTE";
+    } else if (balanza <= -5){
+        cout << "HAS PERDIDO ¿QUIERES INTENTARLO DE NUEVO?";
+        }
     return 0;
 }
 
@@ -132,10 +130,11 @@ void ImprimirVitales(){
 }
 
 void MenuOpciones(){
+    int opc = 0;
+    do{
     cout << "  ♦️ Que desea hacer?" << endl << endl;
-    cout << "    Dar Turno    Usar Carta   Agarrar Carta" << endl;
-    cout << "      - 1 -        - 2 -         - 3 -" << endl;
-    int opc;
+    cout << "    Dar Turno    Usar Carta" << endl;
+    cout << "      - 1 -        - 2 -   " << endl;
     cout << "  >>"; cin >> opc;
     switch(opc){
     case 1:
@@ -144,10 +143,14 @@ void MenuOpciones(){
     case 2:
         UsarCartaMazo();
         break;
-    case 3:
-        AgarrarCartaBaraja();
-        break;
+    default:
+        ImprimirPantalla();
+        cout<<"  ! Esa opcion no existe..."<<endl<<endl;
+        cout << endl << "  >>⌛ ";
+        system("pause");
+        ImprimirPantalla();
     }
+    }while(opc < 1 || opc > 2);
 }
 
 void ImprimirCartaTablero(struct Carta c){
@@ -188,11 +191,21 @@ void ImprimirMazo(){ //Imprime el MAZO completo
         cout << "  ("<<i+1<<")  ";
         ImprimirCartaMazo(mazo[i]);
     }
-    cout << endl;
+    cout << "<<<<>>>><><<<<>>>><><<<<>>>><><<<<>> ><>< << > <>< <<   >" << endl;
 }
 void Continuar(){
     ImprimirPantalla();
-    VerificarGanador();
+
+    AgarrarCartaBaraja();
+    ImprimirPantalla();
+
+    MenuOpciones();
+};
+void ContinuarSinAgarrar(){
+    ImprimirPantalla();
+
+    ImprimirPantalla();
+
     MenuOpciones();
 };
 void ImprimirPantalla(){ //Imprime tablero y mazo completos
