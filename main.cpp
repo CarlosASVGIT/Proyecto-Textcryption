@@ -4,6 +4,7 @@
 
 #include <windows.h> //libreria para imprimir emoji
 
+#include "Proye_Lib.h"//libreria propia, funciones de imprimir
 
 using namespace std;
 
@@ -15,8 +16,10 @@ int numCartasNIV1 = 6;
 int balanza=0;
 
 ///Declaración de Funciones
+void Menu();
 void DarTurno();
 void Continuar();
+void ContinuarSinAgarrar();
 void UsarCartaMazo();
 void ImprimirVitales();
 void MenuOpciones();
@@ -34,7 +37,9 @@ void DarTurno();
 void AccionJugador();
 void AccionEnemigo();
 void VerificarGanador();
-void Tutorial();
+void ExplicacionAgarrarCarta();
+void ExplicacionTurno();
+
 
 
 ///Declaración de esructura
@@ -49,28 +54,31 @@ struct Carta{ //Se declaran los elementos que tiene cada 'Carta'
 };
 
 ///Definicion de estructuras
-struct Carta Baraja[6] = { //Cartas que el jugador PODRÍA agarrar de la BARAJA
+struct Carta Baraja[7] = { //Cartas que el jugador PODRÍA agarrar de la BARAJA
     //Nombre, HP, PWR, Cost
-        {"Norm", 3, 2, 2, 0, 0, 0},
-        {"Prot", 4, 1, 3, 0, 0, 0},
-        {"Atac", 2, 3, 3, 0, 0, 0},
-        {"Bara", 1, 1, 1, 0, 0, 0},
-        {"Debi", 2, 2, 2, 0, 0, 0},
-        {"Fuer", 4, 5, 5, 0, 0, 0}
+        {"Bee ", 1, 2, 2, 0, 0, 0},
+        {"Crub", 3, 1, 3, 0, 0, 0},
+        {"Fly ", 2, 2, 2, 0, 0, 0},
+        {"Wasp", 2, 3, 4, 0, 0, 0},
+        {"Ant ", 1, 1, 1, 0, 0, 0},
+        {"Ant ", 1, 1, 1, 0, 0, 0},
+        {"Bee ", 1, 2, 2, 0, 0, 0},
+
 };
-struct Carta CartasEnemigoNIV1[6] = { //Se crean las cartas que la computadora tendrá para atacar
+struct Carta CartasEnemigoNIV1[7] = { //Se crean las cartas que la computadora tendrá para atacar
     //Turno es el numero del turno
     //Pos es la posicion en que se pondra, 1-2-3-4-5
     //Nombre,   HP,PWR,Cost, Turno, Pos
-        {"Norm", 3, 2, 2,    2,     0, 0},
-        {"Prot", 4, 1, 3,    0,     2, 0},
-        {"Atac", 2, 3, 3,    3,     2, 0},
-        {"Bara", 1, 1, 1,    1,     3, 0},
-        {"Debi", 2, 2, 2,    2,     3, 0},
-        {"Fuer", 4, 5, 5,    5,     3, 0}
+        {"Ant ", 1, 1, 0,    0,     2, 0},
+        {"Fly ", 2, 2, 0,    1,     3, 0},
+        {"Ant ", 1, 1, 0,    1,     4, 0},
+        {"Wasp", 2, 3, 0,    2,     0, 0},
+        {"Rock", 3, 0, 0,    3,     1, 0},
+        {"Fly ", 2, 2, 0,    4,     2, 0},
+        {"Ant ", 1, 1, 0,    4,     3, 0}
 };
 struct Carta Defensa[1] ={
-    {"Defe", 2, 0, 1, 0, 0, 0}
+    {"Rock", 2, 0, 1, 0, 0, 0}
 };
 struct Carta TableroVacio[1] ={
     {"    ", 0, 0, 0, 0, 0, 0}
@@ -94,37 +102,68 @@ int main()
     //Cambia la semilla para el generador de numero aleatorio "rand"
     srand(time(NULL));
     SetConsoleOutputCP(CP_UTF8); //funcion para admitir imprimir emoji
+    Menu();
 
     DarMazoInicial();
     InicioTurno();
-    //Continuar();
+    ContinuarSinAgarrar();
     do {
         Continuar();
     } while(balanza < 5 && balanza > -5);
     system("cls");
     if (balanza >= 5){
-        cout << "VICTORIOSO FELICIDADES LO DERROTASTE";
+        cout << endl << endl << "<<<<>>>><><<<<>>>><><<<<>>>><><<<<>> ><>< << > <>< <<   >" << endl << endl << endl;
+        cout << "       ♦ VICTORIOSO FELICIDADES LO DERROTASTE ♦";
+        cout << endl << endl << "<<<<>>>><><<<<>>>><><<<<>>>><><<<<>> ><>< << > <>< <<   >" << endl << endl << endl;
     } else if (balanza <= -5){
-        cout << "HAS PERDIDO ¿QUIERES INTENTARLO DE NUEVO?";
+        cout << endl << endl << "<<<<>>>><><<<<>>>><><<<<>>>><><<<<>> ><>< << > <>< <<   >" << endl << endl << endl;
+        cout << "       ♦ HAS PERDIDO, SUERTE LA PROXIMA VEZ ♦";
+        cout << endl << endl << "<<<<>>>><><<<<>>>><><<<<>>>><><<<<>> ><>< << > <>< <<   >" << endl << endl << endl;
         }
     return 0;
 }
 
-void Tutorial(){
-cout<<"Aqui hay una explicacion sobre como funciona cada parte del juego:\n\n\n"<<endl;
-cout<<"⚡ = STAMINA y COSTE de la carta. Hay un limite de 6 de stamina y aumentara \nen uno cada turno, esta se gastara dependiendo del coste de tu carta.\n\n"<<endl;
-cout<<"❤ = HP o VIDA de la carta. Cada carta tiene su propia cantidad de HP y esta \nbajara su valor si es atacada por otra carta en el tablero enemigo. \n\n"<<endl;
-cout<<"✊ = ATAQUE de la carta. este tambien varia dependiendo de la carta, es la \ncantidad de daño que se le hara al enemigo.\n\n"<<endl;
-cout<<"BALANZA = es la cantidad de daño que se le hace al enemigo o que este le \nhace al jugador(5 puntos como max), solo aumenta o disminuye cuando se ataca a un lugar del \ntablero sin una carta.\n\n"<<endl;
-cout<<"TUS CARTAS = sera el espacio donde colocas tus cartas para atacar al enemigo \ny donde este atacara al jugador de manera horizontal, cada una de las filas \ntiene su enumeracion \n\n"<<endl;
-cout<<"ENEMIGO = espacio donde estaran las cartas del enemigo.\n\n"<<endl;
-cout<<"PROXIMO ENEMIGO = espacio donde se indica las proximas cartas que usara el enenemigo, estas se moveran de \nmanera horizontal al final de cada turno.\n\n"<<endl;
-cout<<"TU MAZO = son todas las cartas que tienes en tu posecion, cada una con \nsu nombre, numero y estadisticas.\n\n"<<endl;
-cout<<"DAR TURNO = implica acabar el turno, por lo que las cartas atacaran, empezando \ncon TUS CARTAS, luego las del ENEMIGO y al final las del PROXIMO ENEMIGO se \nmoveran de lugar.\n\n"<<endl;
-cout<<"USAR CARTA = se escojrea una de las cartas de tu maso y la podras poner en \ncualquier fila de tu tablero, a no ser que esta fila ya este ocupada o que no se \ntenga suficiente estamina.\n\n"<<endl;
-cout<<"AGARRAR CARTA = escoje una carta de la baraja para incluirla en su mazo, esta \naccion no requiere ningun coste.\n\n"<<endl;}
 
-void ImprimirVitales(){
+void Menu(){//Despliega la pantalla de inicio del juego
+    int opc;
+    do{
+    system("cls");
+    cout << endl << "       ♦ Bienvenido al juego ♦"<< endl << endl;
+    cout << endl << endl << "<<<<>>>><><<<<>>>><><<<<>>>><><<<<>> ><>< << > <>< <<   >" << endl << endl << endl;
+    cout << "        ¿Quieres iniciar?"<< endl << endl;
+    cout << "      Tutorial       Juego"<< endl;
+    cout << "       - 1 -         - 2 -"<< endl;
+    cout << "  >>";
+    cin >> opc;
+
+    switch (opc){
+    case 1:{
+        system("cls");
+        Tutorial();//Funcion que despliega la explicacion del juego
+        break;}
+    case 2:{
+        system("cls");
+        cout << endl << endl << "<<<<>>>><><<<<>>>><><<<<>>>><><<<<>> ><>< << > <>< <<   >" << endl << endl;
+        cout << endl  << endl <<"  ♦ Comenzando el juego ♦"<<endl<<endl;
+        cout << endl << endl << "<<<<>>>><><<<<>>>><><<<<>>>><><<<<>> ><>< << > <>< <<   >" << endl << endl;
+        cout << endl << "  >>⌛ ";
+        system("pause");
+        break;}
+
+    default:{
+        system("cls");
+        cout << endl  << endl <<"  ! Esa opcion no existe..."<<endl<<endl;
+        cout << endl << "  >>⌛ ";
+        system("pause");
+        break;}
+    }
+    if(opc==2){break;}
+    }while(opc != 2);
+}
+
+
+
+void ImprimirVitales(){ //Despliega la vida y energía del jugador
     cout << "         " <<"Stamina:" << "      " << "Balanza:" <<endl;
     cout << "         [";
     for(int i = 1; i <= staminaActual; i++) {
@@ -142,10 +181,10 @@ void ImprimirVitales(){
     cout << "]" << endl << endl;
 }
 
-void MenuOpciones(){
+void MenuOpciones(){ //Despliega las opciones que tiene el jugador durante el juego
     int opc = 0;
     do{
-    cout << "  ♦️ Que desea hacer?" << endl << endl;
+    cout << "  ♦ Que desea hacer?" << endl << endl;
     cout << "    Dar Turno    Usar Carta" << endl;
     cout << "      - 1 -        - 2 -   " << endl;
     cout << "  >>"; cin >> opc;
@@ -162,11 +201,13 @@ void MenuOpciones(){
         cout << endl << "  >>⌛ ";
         system("pause");
         ImprimirPantalla();
+        break;
     }
+    if (opc != 1){opc = 0;}
     }while(opc < 1 || opc > 2);
 }
 
-void ImprimirCartaTablero(struct Carta c){
+void ImprimirCartaTablero(struct Carta c){ //Despliega la carta en el tablero
     if (c.HP == 0) {
         cout << "|[             ]";
     } else {
@@ -174,7 +215,7 @@ void ImprimirCartaTablero(struct Carta c){
     }
 }
 
-void ImprimirCartaPreTablero(struct Carta c){
+void ImprimirCartaPreTablero(struct Carta c){ //Imprime la carta en el pre-tablero
     if (c.HP == 0) {
         cout << "| [        ] ";
     } else {
@@ -186,7 +227,7 @@ void ImprimirCartaMazo(struct Carta c){//Imprime info de Carta individualmente
     cout << c.nombre << "   COST: ⚡" << c.COST << " [❤" << c.HP << "  ✊" << c.PWR << "]" << endl;
 }
 
-void ImprimirTablero() {
+void ImprimirTablero() { //Imprime tanto el tablero, el tablero enemigo y el pretablero
     cout << "      Tus cartas          Enemigo          Proximo Enemigo" << endl << endl;
     for (int i = 0; i < 5; i++) {
         cout << "  ("<< i+1 <<") ";
@@ -206,7 +247,7 @@ void ImprimirMazo(){ //Imprime el MAZO completo
     }
     cout << "<<<<>>>><><<<<>>>><><<<<>>>><><<<<>> ><>< << > <>< <<   >" << endl;
 }
-void Continuar(){
+void Continuar(){//Continua con el siguiente turno despues de la funcion DarTurno
     ImprimirPantalla();
 
     AgarrarCartaBaraja();
@@ -214,32 +255,35 @@ void Continuar(){
 
     MenuOpciones();
 };
-void ContinuarSinAgarrar(){
-    ImprimirPantalla();
-
+void ContinuarSinAgarrar(){//Continua con el siguiente turno sin Agarrar carta
     ImprimirPantalla();
 
     MenuOpciones();
 };
 void ImprimirPantalla(){ //Imprime tablero y mazo completos
-    system("cls"); //Limpia la pantalla
+    system("cls");
     ImprimirVitales();
     ImprimirTablero();
     ImprimirMazo();
 }
 
-void DarTurno(){
+void DarTurno(){ //Hace todas las acciones que deben hacer al final del turno
     ActualizarStamina();
-
     AccionJugador();
     AccionEnemigo();
     AvanceTurno();
+
+    system("cls");
+    ImprimirVitales();
+    ImprimirTablero();
+    ExplicacionTurno();
+
 }
 
 void DarMazoInicial(){ //Pone cartas Random en el array MAZO del jugador
     mazo[0]=Defensa[0];
     for(int i = 0; i<=3; i++){
-        int Aleatorio = rand() % 6;
+        int Aleatorio = rand() % 5;
         mazo[i+1]=Baraja[Aleatorio];
         numCartasMazo++; //contador de cartas totales en el MAZO
     }
@@ -247,19 +291,18 @@ void DarMazoInicial(){ //Pone cartas Random en el array MAZO del jugador
 
 void AgarrarCartaBaraja(){ //Agrega una carta al MAZO del jugador
     int opc;
+
+    do{
     ImprimirPantalla();
-    cout << "  ♦️ De que baraja quieres agarrar la carta?"<< endl << endl;
-    cout << "      Baraja Aleatoria       Baraja Defensa"<< endl;
-    cout << "           - 1 -                  - 2 -"<< endl;
+    cout << "  ♦♦♦ De que baraja quieres agarrar la carta?"<< endl << endl;
+    cout << "      Baraja Aleatoria       Baraja Defensa       Informacion"<< endl;
+    cout << "           - 1 -                  - 2 -              - 3 -"<< endl;
     cout << "  >>"; cin >> opc;
     ImprimirPantalla();
 
-    do{
-    if (opc == 0){break;}
-
     switch (opc){
     case 1:{
-        int Aleatorio = rand() % 6;//Escoje un numero del 1 al 6 para agarrar una carta del array Baraja
+        int Aleatorio = rand() % 5;//Escoje un numero del 1 al 6 para agarrar una carta del array Baraja
         mazo[numCartasMazo]=Baraja[Aleatorio];
         numCartasMazo++; //contador de cartas totales en el MAZO
         break;}
@@ -267,7 +310,18 @@ void AgarrarCartaBaraja(){ //Agrega una carta al MAZO del jugador
         mazo[numCartasMazo]=Defensa[0];
         numCartasMazo++;
         break;}
+    case 3:{
+        ExplicacionAgarrarCarta();
+        break;}
+    default:{
+        ImprimirPantalla();
+        cout<<"  ! Esa opcion no existe..."<<endl<<endl;
+        cout << endl << "  >>⌛ ";
+        system("pause");
+        ImprimirPantalla();
+        break;}
     }
+    }while(opc <= 0 || opc >=3);
 
     ImprimirPantalla();
     cout << "  ♦️ Agarraste la carta:" << endl << endl;
@@ -275,18 +329,14 @@ void AgarrarCartaBaraja(){ //Agrega una carta al MAZO del jugador
     ImprimirCartaMazo(mazo[numCartasMazo-1]);
     cout << endl << "  >>⌛ ";
     system("pause");
-    break;
-    }while(true);
 }
 
-void UsarCartaMazo(){
+void UsarCartaMazo(){//Funcion para Usar la carta del mazo y la colocarla en el tablero
     /*Quita una carta del MAZO del jugador */
     ImprimirPantalla();
     int eleccion;
+    Carta CartaUsada;
     do{
-            Carta CartaUsada;
-
-        do{
             cout << "  ♦️ Que carta vas a usar?      (Cancelar - 0)" << endl << endl << endl;
             cout << "  >>"; cin >> eleccion;
             if (eleccion == 0){break;}
@@ -309,13 +359,13 @@ void UsarCartaMazo(){
                 }
             }
         }while (eleccion > numCartasMazo || eleccion < 0 || CartaUsada.COST > staminaActual);
-    if (eleccion == 0){break;}
+    if (eleccion != 0){
 
     ImprimirPantalla();
     int pos;
 
         do{
-            cout<<"  ♦️ En que posicion quieres poner la carta?" << endl <<endl<< "     ";
+            cout<<"  ♦️ En que posicion quieres poner la carta?      (Cancelar - 0)" << endl <<endl<< "     ";
             ImprimirCartaMazo(CartaUsada);
             cout<< endl;
             cout << "  >>"; cin>>pos;
@@ -335,7 +385,7 @@ void UsarCartaMazo(){
                 ImprimirPantalla();
             }
         }while(TuTablero[pos-1].HP!=0 || pos<1 || pos>5);
-    if (pos == 0){break;}
+    if (pos != 0){
 
     numCartasMazo--;//contador de cartas totales en el MAZO
 
@@ -345,12 +395,12 @@ void UsarCartaMazo(){
 
     TuTablero[pos-1]=CartaUsada;//imprimir la carta que uses del mazo
     staminaActual=staminaActual-CartaUsada.COST;
-    break;
 
-    }while(true);
+    }
 }
-
-void ActualizarStamina(){ //Aumenta la STAMINAMAXima en +1 hasta
+ImprimirPantalla();
+}
+void ActualizarStamina(){ //Aumenta la STAMINAMAXima en +1, hasta que llega al 6
     staminaMax++;
     if(staminaMax > 6) {
         staminaMax = 6;
@@ -359,7 +409,7 @@ void ActualizarStamina(){ //Aumenta la STAMINAMAXima en +1 hasta
 }
 
 
-void InicioTurno(){
+void InicioTurno(){ //Prepara el tablero para el primer turno
     for(int i = 0; i < numCartasNIV1; i++){
             switch(CartasEnemigoNIV1[i].Turno){
             case 0:
@@ -374,7 +424,7 @@ void InicioTurno(){
     numTurno++;
 }
 
-void AvanceTurno(){
+void AvanceTurno(){ //Mueve las cartas para el siguiente turno
     //Mover cartas de PreTablero a Tablero
     numTurno++;
     for(int i = 0; i < 5; i++){
@@ -402,7 +452,7 @@ void AvanceTurno(){
         }
     }
 }
-void AccionJugador(){
+void AccionJugador(){//Las cartas del jugador atacan
     int danoExtra = 0;
         for(int i = 0; i < 5; i++){
         if (TuTablero[i].HP!=0){
@@ -424,7 +474,7 @@ void AccionJugador(){
      }
  }
 
-void AccionEnemigo(){
+void AccionEnemigo(){//Las cartas del enemigo atacan
     for(int i = 0; i < numCartasNIV1; i++) {
         if (TableroEnemigo[i].HP!=0){
             if (TuTablero[i].HP!=0){
@@ -436,4 +486,42 @@ void AccionEnemigo(){
             }
         }
     }
+}
+void ExplicacionAgarrarCarta(){//Despliega informacion de las cartas para agarrar
+    system("cls");
+    cout << endl << endl << "   i Estas son las cartas que te pueden tocar..." << endl<< endl << "  ♦ Cartas de la Baraja Aleatoria:" << endl<< endl;
+    for(int i = 0; i <= 4; i++){
+    cout << "      ";
+    ImprimirCartaMazo(Baraja[i]);
+    }
+    cout << endl << endl << "  ♦ Carta de la Baraja Defensa:" << endl<< endl;
+    cout << "      ";
+    ImprimirCartaMazo(Defensa[0]);
+    cout << endl << endl << "<<<<>>>><><<<<>>>><><<<<>>>><><<<<>> ><>< << > <>< <<   >" << endl << endl;
+    cout << endl << "  >>⌛ ";
+    system("pause");
+}
+void ExplicacionTurno(){//Despliega informacion breve de lo sucedido en el turno
+
+    cout << endl << endl << "<<<<>>>><><<<<>>>><><<<<>>>><><<<<>> ><>< << > <>< <<   >" << endl << endl;
+    if (balanza <= -5){
+        cout << "  ! Tu balanza CAYÓ. Haz perdido!" << endl << endl;
+        cout << endl << "  >>⌛ ";
+        system("pause");
+    }
+    if (balanza <-1 && balanza > -5){
+        cout << "  ! Tu balanza esta BAJA, tienes poca vida!" << endl << endl;
+        cout << "  ♦️ Siguiente turno..." << endl << endl << endl << "  >>⌛ ";
+    system("pause");
+    }
+    if (balanza >=-1 && balanza < 5){
+        cout << "  ♦️ Siguiente turno..." << endl << endl << endl << "  >>⌛ ";
+    system("pause");
+    }
+    if (balanza >= 5){
+        cout << "  ! Tu balanza SUBIÓ. Haz GANADO!" << endl << endl;
+        cout << endl << "  >>⌛ ";
+    system("pause");
+    }
+
 }
