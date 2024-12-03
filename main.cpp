@@ -34,7 +34,7 @@ void DarTurno();
 void AccionJugador();
 void AccionEnemigo();
 void VerificarGanador();
-
+void Tutorial();
 
 
 ///Declaración de esructura
@@ -110,6 +110,19 @@ int main()
     return 0;
 }
 
+void Tutorial(){
+cout<<"Aqui hay una explicacion sobre como funciona cada parte del juego:\n\n\n"<<endl;
+cout<<"⚡ = STAMINA y COSTE de la carta. Hay un limite de 6 de stamina y aumentara \nen uno cada turno, esta se gastara dependiendo del coste de tu carta.\n\n"<<endl;
+cout<<"❤ = HP o VIDA de la carta. Cada carta tiene su propia cantidad de HP y esta \nbajara su valor si es atacada por otra carta en el tablero enemigo. \n\n"<<endl;
+cout<<"✊ = ATAQUE de la carta. este tambien varia dependiendo de la carta, es la \ncantidad de daño que se le hara al enemigo.\n\n"<<endl;
+cout<<"BALANZA = es la cantidad de daño que se le hace al enemigo o que este le \nhace al jugador(5 puntos como max), solo aumenta o disminuye cuando se ataca a un lugar del \ntablero sin una carta.\n\n"<<endl;
+cout<<"TUS CARTAS = sera el espacio donde colocas tus cartas para atacar al enemigo \ny donde este atacara al jugador de manera horizontal, cada una de las filas \ntiene su enumeracion \n\n"<<endl;
+cout<<"ENEMIGO = espacio donde estaran las cartas del enemigo.\n\n"<<endl;
+cout<<"PROXIMO ENEMIGO = espacio donde se indica las proximas cartas que usara el enenemigo, estas se moveran de \nmanera horizontal al final de cada turno.\n\n"<<endl;
+cout<<"TU MAZO = son todas las cartas que tienes en tu posecion, cada una con \nsu nombre, numero y estadisticas.\n\n"<<endl;
+cout<<"DAR TURNO = implica acabar el turno, por lo que las cartas atacaran, empezando \ncon TUS CARTAS, luego las del ENEMIGO y al final las del PROXIMO ENEMIGO se \nmoveran de lugar.\n\n"<<endl;
+cout<<"USAR CARTA = se escojrea una de las cartas de tu maso y la podras poner en \ncualquier fila de tu tablero, a no ser que esta fila ya este ocupada o que no se \ntenga suficiente estamina.\n\n"<<endl;
+cout<<"AGARRAR CARTA = escoje una carta de la baraja para incluirla en su mazo, esta \naccion no requiere ningun coste.\n\n"<<endl;}
 
 void ImprimirVitales(){
     cout << "         " <<"Stamina:" << "      " << "Balanza:" <<endl;
